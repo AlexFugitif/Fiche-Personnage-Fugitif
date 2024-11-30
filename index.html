@@ -80,9 +80,40 @@
     </style>
 </head>
 <body>
-    <div class="fiche" id="fiche">
-        <h1>Fiche de Personnage</h1>
-        <h2>Le Fugitif - Polarpunk Uchronie</h2>
+   <!-- Slots pour les objets -->
+<div class="section">
+    <h3 class="section-title">Inventaire</h3>
+    <div class="slots">
+        <!-- Slot 1 -->
+        <div class="slot" id="slot-1">
+            <input type="file" id="slot-input-1" accept="image/*" style="display: none;" onchange="previewSlot(event, 1)">
+            <img id="slot-img-1" src="" alt="Objet 1" style="display: none;">
+            <button class="delete-button" onclick="deleteSlotImage(1)">&times;</button>
+        </div>
+
+        <!-- Slot 2 -->
+        <div class="slot" id="slot-2">
+            <input type="file" id="slot-input-2" accept="image/*" style="display: none;" onchange="previewSlot(event, 2)">
+            <img id="slot-img-2" src="" alt="Objet 2" style="display: none;">
+            <button class="delete-button" onclick="deleteSlotImage(2)">&times;</button>
+        </div>
+
+        <!-- Slot 3 -->
+        <div class="slot" id="slot-3">
+            <input type="file" id="slot-input-3" accept="image/*" style="display: none;" onchange="previewSlot(event, 3)">
+            <img id="slot-img-3" src="" alt="Objet 3" style="display: none;">
+            <button class="delete-button" onclick="deleteSlotImage(3)">&times;</button>
+        </div>
+
+        <!-- Slot 4 -->
+        <div class="slot" id="slot-4">
+            <input type="file" id="slot-input-4" accept="image/*" style="display: none;" onchange="previewSlot(event, 4)">
+            <img id="slot-img-4" src="" alt="Objet 4" style="display: none;">
+            <button class="delete-button" onclick="deleteSlotImage(4)">&times;</button>
+        </div>
+    </div>
+</div>
+
 
         <!-- Nom du personnage -->
         <input type="text" placeholder="Nom du personnage" class="name-input">

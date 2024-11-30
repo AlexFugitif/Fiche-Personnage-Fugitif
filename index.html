@@ -6,164 +6,24 @@
     <title>Fiche de Personnage - Le Fugitif</title>
     <style>
         /* Votre CSS inchangé */
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-        body {
-            font-family: 'Orbitron', sans-serif;
-            background-color: #0a0a0f;
-            color: #ffffff;
-            margin: 0;
-            padding: 20px;
-            -webkit-tap-highlight-color: transparent;
-        }
-        h1, h2 {
-            text-align: center;
-            text-transform: uppercase;
-            font-weight: bold;
-        }
-        h1 {
-            font-size: 2em;
-            color: #00b3ff;
-            text-shadow: 0 0 15px #00b3ff;
-        }
-        h2 {
-            font-size: 1.2em;
-            color: #ff6a00;
-            text-shadow: 0 0 10px #ff6a00;
-        }
-        .fiche {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 15px;
-            background: linear-gradient(145deg, #121217, #1a1a1f);
-            border: 2px solid #00b3ff;
-            border-radius: 15px;
-            box-shadow: 0 0 20px #00b3ff, 0 0 8px #ff6a00 inset;
-        }
-        input[type="text"].name-input {
-            font-size: 1.5em;
-            text-align: center;
-            background: transparent;
-            border: none;
-            color: #ff6a00;
-            text-shadow: 0 0 15px #ff6a00;
-            border-bottom: 2px solid #00b3ff;
-            outline: none;
-            width: 100%;
-            margin-bottom: 20px;
-        }
-        .image-preview {
-            width: 100%;
-            max-width: 350px;
-            height: 450px;
-            background: #1f1f24;
-            border: 4px solid #00b3ff;
-            border-radius: 10px;
-            box-shadow: 0 0 15px #00b3ff;
-            margin: 0 auto 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-        .image-preview img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .delete-button {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: rgba(255, 0, 0, 0.7);
-            border: none;
-            color: #fff;
-            padding: 5px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 16px;
-            display: none;
-        }
-        .slot .delete-button {
-            top: 2px;
-            right: 2px;
-            font-size: 12px;
-            padding: 3px;
-        }
-        .slots {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        .slot {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            background: #1f1f24;
-            border: 2px solid #00b3ff;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 10px #00b3ff;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer;
-        }
-        .slot img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
-        }
-        .section {
-            margin-bottom: 20px;
-            padding: 15px;
-            background: #121217;
-            border: 1px solid #3e3e44;
-            border-radius: 8px;
-            box-shadow: 0 0 10px #3e3e44;
-        }
-        .section-title {
-            font-size: 1.5em;
-            margin-bottom: 10px;
-            color: #ff6a00;
-            text-shadow: 0 0 10px #ff6a00;
-            border-bottom: 2px solid #00b3ff;
-            padding-bottom: 5px;
-        }
-        input, textarea {
-            width: 100%;
-            background: #1f1f24;
-            color: #ffffff;
-            border: 1px solid #00ff88;
-            padding: 10px;
-            margin-top: 5px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px #00ff88;
-            font-family: 'Orbitron', sans-serif;
-        }
-        textarea {
-            resize: none;
-            height: 100px;
-        }
+        /* ... */
     </style>
+    <!-- Inclusion des bibliothèques nécessaires -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
     <div class="fiche">
-        <h1>Fiche de Personnage</h1>
-        <h2>Le Fugitif - Polarpunk Uchronie</h2>
+        <!-- ... Votre contenu HTML inchangé ... -->
 
         <!-- Nom du personnage -->
         <input type="text" class="name-input" placeholder="Entrez le nom du personnage ici">
 
+        <!-- Champ pour l'URL de l'image principale -->
+        <input type="text" id="image-url" placeholder="Entrez l'URL de l'image principale">
+
         <!-- Cadre pour l'image du personnage -->
         <div class="image-preview" id="image-preview">
-            <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="previewImage(event)">
             <img id="main-image" src="" alt="Image du personnage" style="display: none;">
             <button class="delete-button" onclick="deleteImage('main-image')">&times;</button>
         </div>
@@ -174,149 +34,83 @@
             <div class="slots">
                 <!-- Slot 1 -->
                 <div class="slot" id="slot-1">
-                    <input type="file" id="slot-input-1" accept="image/*" style="display: none;" onchange="previewSlot(event, 1)">
+                    <input type="text" id="slot-url-1" placeholder="Entrez l'URL de l'image du slot 1">
                     <img id="slot-img-1" src="" alt="Objet 1" style="display: none;">
                     <button class="delete-button" onclick="deleteSlotImage(1)">&times;</button>
                 </div>
-
+                <!-- Répétez pour les autres slots -->
                 <!-- Slot 2 -->
                 <div class="slot" id="slot-2">
-                    <input type="file" id="slot-input-2" accept="image/*" style="display: none;" onchange="previewSlot(event, 2)">
+                    <input type="text" id="slot-url-2" placeholder="Entrez l'URL de l'image du slot 2">
                     <img id="slot-img-2" src="" alt="Objet 2" style="display: none;">
                     <button class="delete-button" onclick="deleteSlotImage(2)">&times;</button>
                 </div>
-
                 <!-- Slot 3 -->
                 <div class="slot" id="slot-3">
-                    <input type="file" id="slot-input-3" accept="image/*" style="display: none;" onchange="previewSlot(event, 3)">
+                    <input type="text" id="slot-url-3" placeholder="Entrez l'URL de l'image du slot 3">
                     <img id="slot-img-3" src="" alt="Objet 3" style="display: none;">
                     <button class="delete-button" onclick="deleteSlotImage(3)">&times;</button>
                 </div>
-
                 <!-- Slot 4 -->
                 <div class="slot" id="slot-4">
-                    <input type="file" id="slot-input-4" accept="image/*" style="display: none;" onchange="previewSlot(event, 4)">
+                    <input type="text" id="slot-url-4" placeholder="Entrez l'URL de l'image du slot 4">
                     <img id="slot-img-4" src="" alt="Objet 4" style="display: none;">
                     <button class="delete-button" onclick="deleteSlotImage(4)">&times;</button>
                 </div>
             </div>
         </div>
 
-        <!-- Identité -->
-        <div class="section">
-            <h3 class="section-title">Identité</h3>
-            <label>Alias :</label>
-            <input type="text" placeholder="Entrez l'alias">
-            <label>Profession :</label>
-            <input type="text" placeholder="Entrez la profession">
-            <label>Affiliation :</label>
-            <input type="text" placeholder="Entrez l'affiliation">
-        </div>
-
-        <!-- Statistiques Principales -->
-        <div class="section">
-            <h3 class="section-title">Statistiques Principales</h3>
-            <label>Points de Vie (PV) :</label>
-            <input type="number" placeholder="Entrez les PV">
-            <label>Intellect (INT) :</label>
-            <input type="number" placeholder="Entrez les points d'Intellect">
-            <label>Force (FOR) :</label>
-            <input type="number" placeholder="Entrez les points de Force">
-            <label>Endurance (STA) :</label>
-            <input type="number" placeholder="Entrez les points d'Endurance">
-        </div>
-
-        <!-- Compétences -->
-        <div class="section">
-            <h3 class="section-title">Compétences</h3>
-            <textarea placeholder="Listez les compétences ici"></textarea>
-        </div>
-
-        <!-- Pouvoir Unique -->
-        <div class="section">
-            <h3 class="section-title">Pouvoir Unique</h3>
-            <label>Nom du Pouvoir :</label>
-            <input type="text" placeholder="Entrez le nom du pouvoir">
-            <label>Description :</label>
-            <textarea placeholder="Décrivez le pouvoir"></textarea>
-        </div>
-
-        <!-- Histoire -->
-        <div class="section">
-            <h3 class="section-title">Histoire</h3>
-            <textarea placeholder="Écrivez l'histoire et les motivations ici"></textarea>
-        </div>
+        <!-- ... Le reste de votre contenu ... -->
     </div>
 
     <!-- Bouton pour générer le PDF -->
     <button id="generate-pdf" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; display: block; margin: 20px auto; background-color: #00b3ff; color: white; border: none; border-radius: 5px; cursor: pointer;">Générer le PDF</button>
 
-    <!-- Inclusion des bibliothèques nécessaires -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
     <!-- Votre code JavaScript -->
     <script>
-        // Gestion des images principales
-        document.getElementById('image-preview').addEventListener('click', function() {
-            document.getElementById('file-input').click();
-        });
-
-        function previewImage(event) {
+        // Gestion de l'image principale à partir de l'URL
+        document.getElementById('image-url').addEventListener('change', function() {
+            const url = this.value;
             const imgElement = document.getElementById('main-image');
-            const file = event.target.files[0];
-            if (file) {
-                imgElement.src = URL.createObjectURL(file);
-                imgElement.onload = () => URL.revokeObjectURL(imgElement.src);
-                imgElement.style.display = 'block';
-
-                // Afficher le bouton de suppression
-                document.querySelector('#image-preview .delete-button').style.display = 'block';
-            }
-        }
+            imgElement.crossOrigin = 'Anonymous'; // Pour éviter les problèmes CORS
+            imgElement.src = url;
+            imgElement.style.display = 'block';
+            // Afficher le bouton de suppression
+            document.querySelector('#image-preview .delete-button').style.display = 'block';
+        });
 
         function deleteImage(imageId) {
             const imgElement = document.getElementById(imageId);
             imgElement.src = '';
             imgElement.style.display = 'none';
-
-            // Cacher le bouton de suppression
+            document.getElementById('image-url').value = '';
             document.querySelector('#image-preview .delete-button').style.display = 'none';
-
-            // Réinitialiser l'input file
-            document.getElementById('file-input').value = '';
         }
 
-        // Gestion des slots d'inventaire
-        for (let i = 1; i <= 4; i++) {
-            document.getElementById(`slot-${i}`).addEventListener('click', function() {
-                document.getElementById(`slot-input-${i}`).click();
-            });
-        }
-
-        function previewSlot(event, slotIndex) {
+        // Gestion des slots à partir des URLs
+        function previewSlotFromURL(slotIndex) {
+            const url = document.getElementById(`slot-url-${slotIndex}`).value;
             const imgElement = document.getElementById(`slot-img-${slotIndex}`);
-            const file = event.target.files[0];
-            if (file) {
-                imgElement.src = URL.createObjectURL(file);
-                imgElement.onload = () => URL.revokeObjectURL(imgElement.src);
-                imgElement.style.display = 'block';
+            imgElement.crossOrigin = 'Anonymous'; // Pour éviter les problèmes CORS
+            imgElement.src = url;
+            imgElement.style.display = 'block';
+            // Afficher le bouton de suppression
+            document.querySelector(`#slot-${slotIndex} .delete-button`).style.display = 'block';
+        }
 
-                // Afficher le bouton de suppression
-                document.querySelector(`#slot-${slotIndex} .delete-button`).style.display = 'block';
-            }
+        // Écouteurs pour les champs d'URL des slots
+        for (let i = 1; i <= 4; i++) {
+            document.getElementById(`slot-url-${i}`).addEventListener('change', function() {
+                previewSlotFromURL(i);
+            });
         }
 
         function deleteSlotImage(slotIndex) {
             const imgElement = document.getElementById(`slot-img-${slotIndex}`);
             imgElement.src = '';
             imgElement.style.display = 'none';
-
-            // Cacher le bouton de suppression
+            document.getElementById(`slot-url-${slotIndex}`).value = '';
             document.querySelector(`#slot-${slotIndex} .delete-button`).style.display = 'none';
-
-            // Réinitialiser l'input file
-            document.getElementById(`slot-input-${slotIndex}`).value = '';
         }
 
         // Fonction pour attendre le chargement des images
@@ -324,7 +118,7 @@
             const images = element.querySelectorAll('img');
             const promises = [];
             images.forEach((img) => {
-                if (!img.complete) {
+                if (!img.complete || img.naturalWidth === 0) {
                     promises.push(new Promise((resolve) => {
                         img.onload = img.onerror = resolve;
                     }));
@@ -340,7 +134,7 @@
             const fiche = document.querySelector('.fiche');
 
             waitForImagesToLoad(fiche).then(() => {
-                html2canvas(fiche, { scale: 2, useCORS: true }).then(canvas => {
+                html2canvas(fiche, { scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
                     const imgData = canvas.toDataURL('image/png');
 
                     const pdf = new jsPDF('p', 'mm', 'a4');

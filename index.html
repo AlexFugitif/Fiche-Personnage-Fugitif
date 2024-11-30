@@ -152,6 +152,33 @@
         }
     </style>
 </head>
+    <!-- Ajout du bouton pour générer le PDF -->
+<button id="generate-pdf" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">Générer le PDF</button>
+
+<!-- Script pour générer le PDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+    document.getElementById('generate-pdf').addEventListener('click', () => {
+        // Importation de jsPDF
+        const { jsPDF } = window.jspdf;
+
+        // Crée un nouveau document PDF
+        const pdf = new jsPDF();
+
+        // Capture le contenu du corps de la page
+        const content = document.body;
+
+        // Ajoute le contenu dans le PDF
+        pdf.html(content, {
+            callback: function (doc) {
+                // Télécharge le fichier PDF
+                doc.save('fiche_personnage.pdf');
+            },
+            x: 10,
+            y: 10
+        });
+    });
+</script>
 <body>
     <div class="fiche">
         <h1>Fiche de Personnage</h1>

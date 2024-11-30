@@ -52,8 +52,8 @@
         }
         .image-preview {
             width: 100%;
-            max-width: 350px; /* Taille augmentée */
-            height: 450px;    /* Taille augmentée */
+            max-width: 350px;
+            height: 450px;
             background: #1f1f24;
             border: 4px solid #00b3ff;
             border-radius: 10px;
@@ -64,7 +64,7 @@
             align-items: center;
             position: relative;
             overflow: hidden;
-            cursor: pointer; /* Curseur pointeur pour indiquer la cliquabilité */
+            cursor: pointer;
         }
         .image-preview img {
             width: 100%;
@@ -84,39 +84,6 @@
             cursor: pointer;
             font-size: 16px;
             display: none;
-        }
-        .slot .delete-button {
-            top: 2px;
-            right: 2px;
-            font-size: 12px;
-            padding: 3px;
-        }
-        .slots {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
-        }
-        .slot {
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            background: #1f1f24;
-            border: 2px solid #00b3ff;
-            border-radius: 10px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 10px #00b3ff;
-            position: relative;
-            overflow: hidden;
-            cursor: pointer; /* Curseur pointeur pour les slots */
-        }
-        .slot img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 8px;
         }
         .section {
             margin-bottom: 20px;
@@ -150,37 +117,22 @@
             resize: none;
             height: 100px;
         }
+        #generate-pdf {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #00b3ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: block;
+            margin: 20px auto;
+        }
     </style>
 </head>
-    <!-- Ajout du bouton pour générer le PDF -->
-<button id="generate-pdf" style="margin-top: 20px; padding: 10px 20px; font-size: 16px;">Générer le PDF</button>
-
-<!-- Script pour générer le PDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-<script>
-    document.getElementById('generate-pdf').addEventListener('click', () => {
-        // Importation de jsPDF
-        const { jsPDF } = window.jspdf;
-
-        // Crée un nouveau document PDF
-        const pdf = new jsPDF();
-
-        // Capture le contenu du corps de la page
-        const content = document.body;
-
-        // Ajoute le contenu dans le PDF
-        pdf.html(content, {
-            callback: function (doc) {
-                // Télécharge le fichier PDF
-                doc.save('fiche_personnage.pdf');
-            },
-            x: 10,
-            y: 10
-        });
-    });
-</script>
 <body>
-    <div class="fiche">
+    <div class="fiche" id="fiche">
         <h1>Fiche de Personnage</h1>
         <h2>Le Fugitif - Polarpunk Uchronie</h2>
 
@@ -189,155 +141,33 @@
 
         <!-- Cadre pour l'image du personnage -->
         <div class="image-preview" id="image-preview">
-            <!-- Retrait du texte dans le cadre -->
             <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="previewImage(event)">
             <img id="main-image" src="" alt="Image du personnage" style="display: none;">
             <button class="delete-button" onclick="deleteImage('main-image')">&times;</button>
         </div>
 
-        <!-- Slots pour les objets -->
-        <div class="section">
-            <h3 class="section-title">Inventaire</h3>
-            <div class="slots">
-                <!-- Slot 1 -->
-                <div class="slot" id="slot-1">
-                    <!-- Retrait du texte dans le slot -->
-                    <input type="file" id="slot-input-1" accept="image/*" style="display: none;" onchange="previewSlot(event, 1)">
-                    <img id="slot-img-1" src="" alt="Objet 1" style="display: none;">
-                    <button class="delete-button" onclick="deleteSlotImage(1)">&times;</button>
-                </div>
-
-                <!-- Slot 2 -->
-                <div class="slot" id="slot-2">
-                    <input type="file" id="slot-input-2" accept="image/*" style="display: none;" onchange="previewSlot(event, 2)">
-                    <img id="slot-img-2" src="" alt="Objet 2" style="display: none;">
-                    <button class="delete-button" onclick="deleteSlotImage(2)">&times;</button>
-                </div>
-
-                <!-- Slot 3 -->
-                <div class="slot" id="slot-3">
-                    <input type="file" id="slot-input-3" accept="image/*" style="display: none;" onchange="previewSlot(event, 3)">
-                    <img id="slot-img-3" src="" alt="Objet 3" style="display: none;">
-                    <button class="delete-button" onclick="deleteSlotImage(3)">&times;</button>
-                </div>
-
-                <!-- Slot 4 -->
-                <div class="slot" id="slot-4">
-                    <input type="file" id="slot-input-4" accept="image/*" style="display: none;" onchange="previewSlot(event, 4)">
-                    <img id="slot-img-4" src="" alt="Objet 4" style="display: none;">
-                    <button class="delete-button" onclick="deleteSlotImage(4)">&times;</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Identité -->
-        <div class="section">
-            <h3 class="section-title">Identité</h3>
-            <label>Alias :</label>
-            <input type="text" placeholder="Entrez l'alias">
-            <label>Profession :</label>
-            <input type="text" placeholder="Entrez la profession">
-            <label>Affiliation :</label>
-            <input type="text" placeholder="Entrez l'affiliation">
-        </div>
-
-        <!-- Statistiques Principales -->
-        <div class="section">
-            <h3 class="section-title">Statistiques Principales</h3>
-            <label>Points de Vie (PV) :</label>
-            <input type="number" placeholder="Entrez les PV">
-            <label>Intellect (INT) :</label>
-            <input type="number" placeholder="Entrez les points d'Intellect">
-            <label>Force (FOR) :</label>
-            <input type="number" placeholder="Entrez les points de Force">
-            <label>Endurance (STA) :</label>
-            <input type="number" placeholder="Entrez les points d'Endurance">
-        </div>
-
-        <!-- Compétences -->
-        <div class="section">
-            <h3 class="section-title">Compétences</h3>
-            <textarea placeholder="Listez les compétences ici"></textarea>
-        </div>
-
-        <!-- Pouvoir Unique -->
-        <div class="section">
-            <h3 class="section-title">Pouvoir Unique</h3>
-            <label>Nom du Pouvoir :</label>
-            <input type="text" placeholder="Entrez le nom du pouvoir">
-            <label>Description :</label>
-            <textarea placeholder="Décrivez le pouvoir"></textarea>
-        </div>
-
-        <!-- Histoire -->
-        <div class="section">
-            <h3 class="section-title">Histoire</h3>
-            <textarea placeholder="Écrivez l'histoire et les motivations ici"></textarea>
-        </div>
+        <!-- Autres sections... -->
     </div>
 
+    <button id="generate-pdf">Générer le PDF</button>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
     <script>
-        // Ajout d'un événement pour ouvrir le sélecteur de fichiers lors du clic sur le cadre de l'image principale
-        document.getElementById('image-preview').addEventListener('click', function() {
-            document.getElementById('file-input').click();
-        });
+        document.getElementById('generate-pdf').addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
 
-        function previewImage(event) {
-            const imgElement = document.getElementById('main-image');
-            const file = event.target.files[0];
-            if (file) {
-                imgElement.src = URL.createObjectURL(file);
-                imgElement.onload = () => URL.revokeObjectURL(imgElement.src);
-                imgElement.style.display = 'block';
+            // Capture la fiche en tant qu'image
+            const fiche = document.getElementById('fiche');
+            html2canvas(fiche).then(canvas => {
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF();
 
-                // Afficher le bouton de suppression
-                document.querySelector('#image-preview .delete-button').style.display = 'block';
-            }
-        }
-
-        function deleteImage(imageId) {
-            const imgElement = document.getElementById(imageId);
-            imgElement.src = '';
-            imgElement.style.display = 'none';
-
-            // Cacher le bouton de suppression
-            document.querySelector('#image-preview .delete-button').style.display = 'none';
-
-            // Réinitialiser l'input file
-            document.getElementById('file-input').value = '';
-        }
-
-        // Ajout d'événements pour les slots d'inventaire
-        for (let i = 1; i <= 4; i++) {
-            document.getElementById(`slot-${i}`).addEventListener('click', function() {
-                document.getElementById(`slot-input-${i}`).click();
+                // Ajouter l'image au PDF
+                pdf.addImage(imgData, 'PNG', 10, 10, 180, 0); // Ajuste la taille
+                pdf.save('fiche_personnage.pdf');
             });
-        }
-
-        function previewSlot(event, slotIndex) {
-            const imgElement = document.getElementById(`slot-img-${slotIndex}`);
-            const file = event.target.files[0];
-            if (file) {
-                imgElement.src = URL.createObjectURL(file);
-                imgElement.onload = () => URL.revokeObjectURL(imgElement.src);
-                imgElement.style.display = 'block';
-
-                // Afficher le bouton de suppression
-                document.querySelector(`#slot-${slotIndex} .delete-button`).style.display = 'block';
-            }
-        }
-
-        function deleteSlotImage(slotIndex) {
-            const imgElement = document.getElementById(`slot-img-${slotIndex}`);
-            imgElement.src = '';
-            imgElement.style.display = 'none';
-
-            // Cacher le bouton de suppression
-            document.querySelector(`#slot-${slotIndex} .delete-button`).style.display = 'none';
-
-            // Réinitialiser l'input file
-            document.getElementById(`slot-input-${slotIndex}`).value = '';
-        }
+        });
     </script>
 </body>
 </html>

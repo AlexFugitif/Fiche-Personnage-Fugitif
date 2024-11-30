@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Fiche de Personnage - Le Fugitif</title>
     <style>
+        /* Votre CSS inchangé */
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
         body {
             font-family: 'Orbitron', sans-serif;
@@ -52,8 +53,8 @@
         }
         .image-preview {
             width: 100%;
-            max-width: 350px; /* Taille augmentée */
-            height: 450px;    /* Taille augmentée */
+            max-width: 350px;
+            height: 450px;
             background: #1f1f24;
             border: 4px solid #00b3ff;
             border-radius: 10px;
@@ -64,7 +65,7 @@
             align-items: center;
             position: relative;
             overflow: hidden;
-            cursor: pointer; /* Curseur pointeur pour indiquer la cliquabilité */
+            cursor: pointer;
         }
         .image-preview img {
             width: 100%;
@@ -110,7 +111,7 @@
             box-shadow: 0 0 10px #00b3ff;
             position: relative;
             overflow: hidden;
-            cursor: pointer; /* Curseur pointeur pour les slots */
+            cursor: pointer;
         }
         .slot img {
             width: 100%;
@@ -162,7 +163,6 @@
 
         <!-- Cadre pour l'image du personnage -->
         <div class="image-preview" id="image-preview">
-            <!-- Retrait du texte dans le cadre -->
             <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="previewImage(event)">
             <img id="main-image" src="" alt="Image du personnage" style="display: none;">
             <button class="delete-button" onclick="deleteImage('main-image')">&times;</button>
@@ -174,7 +174,6 @@
             <div class="slots">
                 <!-- Slot 1 -->
                 <div class="slot" id="slot-1">
-                    <!-- Retrait du texte dans le slot -->
                     <input type="file" id="slot-input-1" accept="image/*" style="display: none;" onchange="previewSlot(event, 1)">
                     <img id="slot-img-1" src="" alt="Objet 1" style="display: none;">
                     <button class="delete-button" onclick="deleteSlotImage(1)">&times;</button>
@@ -249,8 +248,16 @@
         </div>
     </div>
 
+    <!-- Bouton pour générer le PDF -->
+    <button id="generate-pdf" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; display: block; margin: 20px auto; background-color: #00b3ff; color: white; border: none; border-radius: 5px; cursor: pointer;">Générer le PDF</button>
+
+    <!-- Inclusion des bibliothèques nécessaires -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <!-- Votre code JavaScript -->
     <script>
-        // Ajout d'un événement pour ouvrir le sélecteur de fichiers lors du clic sur le cadre de l'image principale
+        // Gestion des images principales
         document.getElementById('image-preview').addEventListener('click', function() {
             document.getElementById('file-input').click();
         });
@@ -280,7 +287,7 @@
             document.getElementById('file-input').value = '';
         }
 
-        // Ajout d'événements pour les slots d'inventaire
+        // Gestion des slots d'inventaire
         for (let i = 1; i <= 4; i++) {
             document.getElementById(`slot-${i}`).addEventListener('click', function() {
                 document.getElementById(`slot-input-${i}`).click();
@@ -311,6 +318,57 @@
             // Réinitialiser l'input file
             document.getElementById(`slot-input-${slotIndex}`).value = '';
         }
+
+        // Fonction pour attendre le chargement des images
+        function waitForImagesToLoad(element) {
+            const images = element.querySelectorAll('img');
+            const promises = [];
+            images.forEach((img) => {
+                if (!img.complete) {
+                    promises.push(new Promise((resolve) => {
+                        img.onload = img.onerror = resolve;
+                    }));
+                }
+            });
+            return Promise.all(promises);
+        }
+
+        // Gestion de la génération du PDF
+        document.getElementById('generate-pdf').addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+
+            const fiche = document.querySelector('.fiche');
+
+            waitForImagesToLoad(fiche).then(() => {
+                html2canvas(fiche, { scale: 2, useCORS: true }).then(canvas => {
+                    const imgData = canvas.toDataURL('image/png');
+
+                    const pdf = new jsPDF('p', 'mm', 'a4');
+                    const pdfWidth = pdf.internal.pageSize.getWidth();
+                    const pdfHeight = pdf.internal.pageSize.getHeight();
+
+                    const imgWidth = pdfWidth;
+                    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                    let heightLeft = imgHeight;
+                    let position = 0;
+
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pdfHeight;
+
+                    while (heightLeft > 0) {
+                        position = heightLeft - imgHeight;
+                        pdf.addPage();
+                        pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pdfHeight;
+                    }
+
+                    pdf.save('fiche_personnage.pdf');
+                }).catch(error => {
+                    alert('Erreur lors de la génération du PDF : ' + error.message);
+                });
+            });
+        });
     </script>
 </body>
 </html>

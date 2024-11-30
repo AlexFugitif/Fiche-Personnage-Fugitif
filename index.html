@@ -247,25 +247,41 @@
     document.getElementById('generate-pdf').addEventListener('click', () => {
         const { jsPDF } = window.jspdf;
 
-        // Cible l'élément à capturer
+        // Sélectionne l'élément à capturer
         const fiche = document.querySelector('.fiche');
 
         // Options pour html2canvas
         const options = {
-            scale: 2, // Augmente la résolution
-            useCORS: true // Pour capturer les images
+            scale: 3, // Résolution améliorée
+            useCORS: true, // Capturer les images chargées
         };
 
+        // Capture la fiche avec html2canvas
         html2canvas(fiche, options).then(canvas => {
             const imgData = canvas.toDataURL('image/png');
 
-            // Dimensions du canvas
-            const pdfWidth = 210; // Largeur A4 en mm
-            const pdfHeight = (canvas.height * pdfWidth) / canvas.width; // Calcul proportionnel
+            // Calcul dynamique des dimensions du PDF
+            const imgWidth = 210; // Largeur A4 en mm
+            const pageHeight = 297; // Hauteur A4 en mm
+            const imgHeight = (canvas.height * imgWidth) / canvas.width;
+            let heightLeft = imgHeight;
 
-            // Génère le PDF
+            // Initialise le PDF
             const pdf = new jsPDF('p', 'mm', 'a4');
-            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            let position = 0;
+
+            // Ajoute l'image au PDF, page par page si nécessaire
+            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft > 0) {
+                position = heightLeft - imgHeight; // Nouvelle position pour la page suivante
+                pdf.addPage();
+                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+            }
+
+            // Télécharge le PDF généré
             pdf.save('fiche_personnage.pdf');
         }).catch(error => {
             alert('Erreur lors de la génération du PDF : ' + error.message);

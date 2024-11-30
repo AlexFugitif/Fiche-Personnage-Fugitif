@@ -1,124 +1,27 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Fiche de Personnage - Le Fugitif</title>
-    <style>
-        /* Votre CSS inchangé */
-        /* ... */
-    </style>
+    <!-- ... (votre code head inchangé) ... -->
     <!-- Inclusion des bibliothèques nécessaires -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </head>
 <body>
-    <div class="fiche">
-        <!-- ... Votre contenu HTML inchangé ... -->
-
-        <!-- Nom du personnage -->
-        <input type="text" class="name-input" placeholder="Entrez le nom du personnage ici">
-
-        <!-- Champ pour l'URL de l'image principale -->
-        <input type="text" id="image-url" placeholder="Entrez l'URL de l'image principale">
-
-        <!-- Cadre pour l'image du personnage -->
-        <div class="image-preview" id="image-preview">
-            <img id="main-image" src="" alt="Image du personnage" style="display: none;">
-            <button class="delete-button" onclick="deleteImage('main-image')">&times;</button>
-        </div>
-
-        <!-- Slots pour les objets -->
-        <div class="section">
-            <h3 class="section-title">Inventaire</h3>
-            <div class="slots">
-                <!-- Slot 1 -->
-                <div class="slot" id="slot-1">
-                    <input type="text" id="slot-url-1" placeholder="Entrez l'URL de l'image du slot 1">
-                    <img id="slot-img-1" src="" alt="Objet 1" style="display: none;">
-                    <button class="delete-button" onclick="deleteSlotImage(1)">&times;</button>
-                </div>
-                <!-- Répétez pour les autres slots -->
-                <!-- Slot 2 -->
-                <div class="slot" id="slot-2">
-                    <input type="text" id="slot-url-2" placeholder="Entrez l'URL de l'image du slot 2">
-                    <img id="slot-img-2" src="" alt="Objet 2" style="display: none;">
-                    <button class="delete-button" onclick="deleteSlotImage(2)">&times;</button>
-                </div>
-                <!-- Slot 3 -->
-                <div class="slot" id="slot-3">
-                    <input type="text" id="slot-url-3" placeholder="Entrez l'URL de l'image du slot 3">
-                    <img id="slot-img-3" src="" alt="Objet 3" style="display: none;">
-                    <button class="delete-button" onclick="deleteSlotImage(3)">&times;</button>
-                </div>
-                <!-- Slot 4 -->
-                <div class="slot" id="slot-4">
-                    <input type="text" id="slot-url-4" placeholder="Entrez l'URL de l'image du slot 4">
-                    <img id="slot-img-4" src="" alt="Objet 4" style="display: none;">
-                    <button class="delete-button" onclick="deleteSlotImage(4)">&times;</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- ... Le reste de votre contenu ... -->
-    </div>
+    <!-- ... (votre contenu HTML inchangé) ... -->
 
     <!-- Bouton pour générer le PDF -->
     <button id="generate-pdf" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; display: block; margin: 20px auto; background-color: #00b3ff; color: white; border: none; border-radius: 5px; cursor: pointer;">Générer le PDF</button>
 
     <!-- Votre code JavaScript -->
     <script>
-        // Gestion de l'image principale à partir de l'URL
-        document.getElementById('image-url').addEventListener('change', function() {
-            const url = this.value;
-            const imgElement = document.getElementById('main-image');
-            imgElement.crossOrigin = 'Anonymous'; // Pour éviter les problèmes CORS
-            imgElement.src = url;
-            imgElement.style.display = 'block';
-            // Afficher le bouton de suppression
-            document.querySelector('#image-preview .delete-button').style.display = 'block';
-        });
-
-        function deleteImage(imageId) {
-            const imgElement = document.getElementById(imageId);
-            imgElement.src = '';
-            imgElement.style.display = 'none';
-            document.getElementById('image-url').value = '';
-            document.querySelector('#image-preview .delete-button').style.display = 'none';
-        }
-
-        // Gestion des slots à partir des URLs
-        function previewSlotFromURL(slotIndex) {
-            const url = document.getElementById(`slot-url-${slotIndex}`).value;
-            const imgElement = document.getElementById(`slot-img-${slotIndex}`);
-            imgElement.crossOrigin = 'Anonymous'; // Pour éviter les problèmes CORS
-            imgElement.src = url;
-            imgElement.style.display = 'block';
-            // Afficher le bouton de suppression
-            document.querySelector(`#slot-${slotIndex} .delete-button`).style.display = 'block';
-        }
-
-        // Écouteurs pour les champs d'URL des slots
-        for (let i = 1; i <= 4; i++) {
-            document.getElementById(`slot-url-${i}`).addEventListener('change', function() {
-                previewSlotFromURL(i);
-            });
-        }
-
-        function deleteSlotImage(slotIndex) {
-            const imgElement = document.getElementById(`slot-img-${slotIndex}`);
-            imgElement.src = '';
-            imgElement.style.display = 'none';
-            document.getElementById(`slot-url-${slotIndex}`).value = '';
-            document.querySelector(`#slot-${slotIndex} .delete-button`).style.display = 'none';
-        }
+        // ... (vos fonctions previewImage, deleteImage, etc.) ...
 
         // Fonction pour attendre le chargement des images
         function waitForImagesToLoad(element) {
             const images = element.querySelectorAll('img');
             const promises = [];
             images.forEach((img) => {
-                if (!img.complete || img.naturalWidth === 0) {
+                if (!img.complete) {
                     promises.push(new Promise((resolve) => {
                         img.onload = img.onerror = resolve;
                     }));
@@ -134,7 +37,7 @@
             const fiche = document.querySelector('.fiche');
 
             waitForImagesToLoad(fiche).then(() => {
-                html2canvas(fiche, { scale: 2, useCORS: true, allowTaint: true }).then(canvas => {
+                html2canvas(fiche, { scale: 2, useCORS: true }).then(canvas => {
                     const imgData = canvas.toDataURL('image/png');
 
                     const pdf = new jsPDF('p', 'mm', 'a4');

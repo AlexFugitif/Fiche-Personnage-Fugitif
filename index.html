@@ -243,50 +243,47 @@
     <button id="generate-pdf" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; display: block; margin: 20px auto; background-color: #00b3ff; color: white; border: none; border-radius: 5px; cursor: pointer;">Générer le PDF</button>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-<script>
-    document.getElementById('generate-pdf').addEventListener('click', () => {
-        const { jsPDF } = window.jspdf;
+document.getElementById('generate-pdf').addEventListener('click', () => {
+    const { jsPDF } = window.jspdf;
 
-        // Sélectionne l'élément à capturer
-        const fiche = document.querySelector('.fiche');
+    // Sélectionne la fiche à capturer
+    const fiche = document.querySelector('.fiche');
 
-        // Options pour html2canvas
-        const options = {
-            scale: 3, // Résolution améliorée
-            useCORS: true, // Capturer les images chargées
-        };
+    // Options pour améliorer la capture et gérer CORS
+    const options = {
+        scale: 3, // Résolution améliorée
+        useCORS: true // Capturer les images locales
+    };
 
-        // Capture la fiche avec html2canvas
-        html2canvas(fiche, options).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
+    // Capture la fiche et génère le PDF
+    html2canvas(fiche, options).then(canvas => {
+        const imgData = canvas.toDataURL('image/png');
 
-            // Calcul dynamique des dimensions du PDF
-            const imgWidth = 210; // Largeur A4 en mm
-            const pageHeight = 297; // Hauteur A4 en mm
-            const imgHeight = (canvas.height * imgWidth) / canvas.width;
-            let heightLeft = imgHeight;
+        // Dimensions du PDF (A4 en mm)
+        const pdfWidth = 210; // Largeur A4
+        const pageHeight = 297; // Hauteur A4
+        const imgHeight = (canvas.height * pdfWidth) / canvas.width;
+        let heightLeft = imgHeight;
 
-            // Initialise le PDF
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            let position = 0;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        let position = 0;
 
-            // Ajoute l'image au PDF, page par page si nécessaire
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+        // Ajoute l'image au PDF, page par page si nécessaire
+        pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+        heightLeft -= pageHeight;
+
+        while (heightLeft > 0) {
+            position = heightLeft - imgHeight;
+            pdf.addPage();
+            pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
             heightLeft -= pageHeight;
+        }
 
-            while (heightLeft > 0) {
-                position = heightLeft - imgHeight; // Nouvelle position pour la page suivante
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pageHeight;
-            }
-
-            // Télécharge le PDF généré
-            pdf.save('fiche_personnage.pdf');
-        }).catch(error => {
-            alert('Erreur lors de la génération du PDF : ' + error.message);
-        });
+        // Télécharge le PDF
+        pdf.save('fiche_personnage.pdf');
+    }).catch(error => {
+        alert('Erreur lors de la génération du PDF : ' + error.message);
     });
-</script>
+});
 </body>
 </html>

@@ -240,5 +240,23 @@
             }
         }
     </script>
+    <button id="generate-pdf" style="margin-top: 20px; padding: 10px 20px; font-size: 16px; display: block; margin: 20px auto; background-color: #00b3ff; color: white; border: none; border-radius: 5px; cursor: pointer;">Générer le PDF</button>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script>
+    document.getElementById('generate-pdf').addEventListener('click', () => {
+        const { jsPDF } = window.jspdf;
+
+        // Capture la fiche comme une image
+        html2canvas(document.querySelector('.fiche')).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF();
+
+            // Ajoute l'image capturée dans le PDF
+            pdf.addImage(imgData, 'PNG', 10, 10, 180, 0); // Ajuste la taille et la position si nécessaire
+            pdf.save('fiche_personnage.pdf'); // Nom du fichier généré
+        });
+    });
+</script>
 </body>
 </html>

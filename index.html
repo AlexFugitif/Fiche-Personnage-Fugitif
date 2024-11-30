@@ -247,14 +247,28 @@
     document.getElementById('generate-pdf').addEventListener('click', () => {
         const { jsPDF } = window.jspdf;
 
-        // Capture la fiche comme une image
-        html2canvas(document.querySelector('.fiche')).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF();
+        // Cible l'élément à capturer
+        const fiche = document.querySelector('.fiche');
 
-            // Ajoute l'image capturée dans le PDF
-            pdf.addImage(imgData, 'PNG', 10, 10, 180, 0); // Ajuste la taille et la position si nécessaire
-            pdf.save('fiche_personnage.pdf'); // Nom du fichier généré
+        // Options pour html2canvas
+        const options = {
+            scale: 2, // Augmente la résolution
+            useCORS: true // Pour capturer les images
+        };
+
+        html2canvas(fiche, options).then(canvas => {
+            const imgData = canvas.toDataURL('image/png');
+
+            // Dimensions du canvas
+            const pdfWidth = 210; // Largeur A4 en mm
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width; // Calcul proportionnel
+
+            // Génère le PDF
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save('fiche_personnage.pdf');
+        }).catch(error => {
+            alert('Erreur lors de la génération du PDF : ' + error.message);
         });
     });
 </script>

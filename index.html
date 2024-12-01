@@ -39,7 +39,7 @@
             border-radius: 15px;
             box-shadow: 0 0 20px #00b3ff, 0 0 8px #ff6a00 inset;
         }
-        input[type="text"].name-input {
+        .name-input {
             font-size: 1.5em;
             text-align: center;
             background: transparent;
@@ -50,6 +50,10 @@
             outline: none;
             width: 100%;
             margin-bottom: 20px;
+        }
+        .name-input[contenteditable]:empty:before {
+            content: attr(placeholder);
+            color: #777;
         }
         .section {
             margin-bottom: 20px;
@@ -67,7 +71,7 @@
             border-bottom: 2px solid #00b3ff;
             padding-bottom: 5px;
         }
-        input, textarea {
+        .editable {
             width: 100%;
             background: #1f1f24;
             color: #ffffff;
@@ -78,12 +82,16 @@
             border-radius: 5px;
             box-shadow: 0 0 10px #00ff88;
             font-family: 'Orbitron', sans-serif;
+            outline: none;
+            min-height: 1em;
         }
-        textarea {
-            resize: none;
-            height: 100px;
+        .editable[contenteditable]:empty:before {
+            content: attr(placeholder);
+            color: #777;
         }
-        /* Suppression des styles liés aux images et slots */
+        .editable.multiline {
+            min-height: 100px;
+        }
     </style>
 </head>
 <body>
@@ -92,64 +100,62 @@
         <h2>Le Fugitif - Polarpunk Uchronie</h2>
 
         <!-- Nom du personnage -->
-        <input type="text" class="name-input" placeholder="Entrez le nom du personnage ici">
-
-        <!-- Suppression de la section image -->
+        <div class="name-input" contenteditable="true" placeholder="Entrez le nom du personnage ici"></div>
 
         <!-- Inventaire avec 6 champs de texte -->
         <div class="section">
             <h3 class="section-title">Inventaire</h3>
-            <input type="text" placeholder="Objet 1">
-            <input type="text" placeholder="Objet 2">
-            <input type="text" placeholder="Objet 3">
-            <input type="text" placeholder="Objet 4">
-            <input type="text" placeholder="Objet 5">
-            <input type="text" placeholder="Objet 6">
+            <div class="editable" contenteditable="true" placeholder="Objet 1"></div>
+            <div class="editable" contenteditable="true" placeholder="Objet 2"></div>
+            <div class="editable" contenteditable="true" placeholder="Objet 3"></div>
+            <div class="editable" contenteditable="true" placeholder="Objet 4"></div>
+            <div class="editable" contenteditable="true" placeholder="Objet 5"></div>
+            <div class="editable" contenteditable="true" placeholder="Objet 6"></div>
         </div>
 
         <!-- Identité -->
         <div class="section">
             <h3 class="section-title">Identité</h3>
             <label>Alias :</label>
-            <input type="text" placeholder="Entrez l'alias">
+            <div class="editable" contenteditable="true" placeholder="Entrez l'alias"></div>
             <label>Profession :</label>
-            <input type="text" placeholder="Entrez la profession">
+            <div class="editable" contenteditable="true" placeholder="Entrez la profession"></div>
             <label>Affiliation :</label>
-            <input type="text" placeholder="Entrez l'affiliation">
+            <div class="editable" contenteditable="true" placeholder="Entrez l'affiliation"></div>
         </div>
 
         <!-- Statistiques Principales -->
         <div class="section">
             <h3 class="section-title">Statistiques Principales</h3>
             <label>Points de Vie (PV) :</label>
-            <input type="number" placeholder="Entrez les PV">
+            <div class="editable" contenteditable="true" placeholder="Entrez les PV"></div>
             <label>Intellect (INT) :</label>
-            <input type="number" placeholder="Entrez les points d'Intellect">
+            <div class="editable" contenteditable="true" placeholder="Entrez les points d'Intellect"></div>
             <label>Force (FOR) :</label>
-            <input type="number" placeholder="Entrez les points de Force">
+            <div class="editable" contenteditable="true" placeholder="Entrez les points de Force"></div>
             <label>Endurance (STA) :</label>
-            <input type="number" placeholder="Entrez les points d'Endurance">
+            <div class="editable" contenteditable="true" placeholder="Entrez les points d'Endurance"></div>
         </div>
 
         <!-- Compétences -->
         <div class="section">
             <h3 class="section-title">Compétences</h3>
-            <textarea placeholder="Listez les compétences ici"></textarea>
+            <div class="editable multiline" contenteditable="true" placeholder="Listez les compétences ici"></div>
         </div>
 
         <!-- Pouvoir Unique -->
         <div class="section">
             <h3 class="section-title">Pouvoir Unique</h3>
             <label>Nom du Pouvoir :</label>
-            <input type="text" placeholder="Entrez le nom du pouvoir">
+            <div class="editable" contenteditable="true" placeholder="Entrez le nom du pouvoir"></div>
             <label>Description :</label>
-            <textarea placeholder="Décrivez le pouvoir"></textarea>
+            <div class="editable multiline" contenteditable="true" placeholder="Décrivez le pouvoir"></div>
         </div>
 
         <!-- Histoire -->
         <div class="section">
             <h3 class="section-title">Histoire</h3>
-            <textarea placeholder="Écrivez l'histoire et les motivations ici"></textarea>
+            <div class="editable multiline" contenteditable="true" placeholder="Écrivez l'histoire et les motivations ici"></div>
         </div>
     </div>
 
@@ -162,8 +168,6 @@
 
     <!-- Votre code JavaScript -->
     <script>
-        // Suppression des fonctions liées aux images
-
         // Fonction pour générer le PDF
         document.getElementById('generate-pdf').addEventListener('click', () => {
             const { jsPDF } = window.jspdf;
